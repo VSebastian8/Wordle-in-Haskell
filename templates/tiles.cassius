@@ -1,0 +1,22 @@
+.center
+    text-align: center
+#keyboard
+    display: flex
+    flex-direction: column
+    align-items: center
+#word
+    margin-bottom: 20px
+.tile-row
+    display: flex
+    margin-bottom: 0.3em
+.tile
+    background-color: #d3d6da
+    padding: 0.5em
+    border-radius: 2px
+    margin-right: 0.3em
+    cursor: pointer
+    font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 1.4em;
+.tile:hover
+    background-color: #afb2b5

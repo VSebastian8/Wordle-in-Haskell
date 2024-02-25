@@ -1,0 +1,22 @@
+let tiles = document.getElementsByClassName('tile');
+let textSpace = document.getElementById('word');
+for(let tile of tiles){
+    tile.addEventListener("click", () => {
+        let content = tile.innerHTML;
+        switch(content){
+            case "BACK":
+                if(textSpace.value != "")
+                    textSpace.value = textSpace.value.slice(0, -1);
+                break;
+            case "ENTER":
+                if(textSpace.value != ""){
+                    console.log("Word = " + textSpace.value);
+                    textSpace.value = "";
+                }
+                break;
+            default: 
+                if(textSpace.value.length <= 4)
+                    textSpace.value += content;
+        }
+    });
+}

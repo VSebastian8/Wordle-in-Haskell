@@ -1,0 +1,8 @@
+<div .center>
+    <h1> Keyboard
+    <input #word type=input placeholder="Press keys please" disabled>
+    <div #keyboard .prevent-select>
+        $forall rowTile <- allTiles
+            <div .tile-row>
+                $forall tile <- rowTile
+                    <div .tile>#{tile}
