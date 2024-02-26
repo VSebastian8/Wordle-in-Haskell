@@ -10,8 +10,24 @@ for(let tile of tiles){
                 break;
             case "ENTER":
                 if(textSpace.value != ""){
-                    console.log("Word = " + textSpace.value);
+                    word = textSpace.value;
+                    console.log(word);
                     textSpace.value = "";
+                    $.ajax({
+                        url: '@{WordR}',
+                        type: 'POST',
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            guess: word,
+                        }),
+                        success: function (data) {
+                            console.log("Succes " + data.message + " " + data.number);
+       
+                        },
+                        error: function (data) {
+                            console.log("Error creating comment: " + data);
+                        },
+                    });
                 }
                 break;
             default: 
