@@ -11,7 +11,6 @@ for(let tile of tiles){
             case "ENTER":
                 if(textSpace.value != ""){
                     word = textSpace.value;
-                    console.log(word);
                     textSpace.value = "";
                     $.ajax({
                         url: '@{WordR}',
@@ -20,12 +19,14 @@ for(let tile of tiles){
                         data: JSON.stringify({
                             guess: word,
                         }),
-                        success: function (data) {
-                            console.log("Succes " + data.message + " " + data.number);
-       
+                        success: function (response) {
+                            console.log("Succes ");
+                            console.log(response.pattern);
                         },
-                        error: function (data) {
-                            console.log("Error creating comment: " + data);
+                        error: function (err) {
+                            console.log("Error ");
+                            console.log(err.responseJSON);
+                            alert(err.responseJSON.message);
                         },
                     });
                 }

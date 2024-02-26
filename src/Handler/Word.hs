@@ -9,23 +9,23 @@
 module Handler.Word where
 
 import Import
-import Data.Aeson (FromJSON, ToJSON, withObject)
+import Data.Aeson (withObject)
 
-data JsonRequest = JsonRequest 
+data JsonGuess = JsonGuess 
     { guess :: Text }
-data JsonResponse = JsonResponse
-    { message :: Text
-    , number :: Int
-    }
+data JsonPattern = JsonPattern
+    { pattern :: [Text] }
 
-instance FromJSON JsonRequest where
-    parseJSON =  withObject "JsonRequest" $ \v -> 
-        JsonRequest <$> v .: "guess"
-instance ToJSON JsonResponse where 
-    toJSON (JsonResponse m n) = object ["message" .= m, "number" .= n]
+instance FromJSON JsonGuess where
+    parseJSON =  withObject "JsonGuess" $ \v -> 
+        JsonGuess <$> v .: "guess"
+instance ToJSON JsonPattern where 
+    toJSON (JsonPattern pat) = object ["pattern" .= pat]
 
 postWordR :: Handler Value
 postWordR = do
-    requestBody <- requireJsonBody :: Handler JsonRequest
-    let userGuess = guess requestBody
-    returnJson $ JsonResponse ("Hello, " ++ userGuess) 42
+    guessRequestBody <- requireCheckJsonBody :: Handler JsonGuess
+    let userGuess = guess guessRequestBody
+    if (length userGuess) /= 5
+        then sendResponseStatus status400 (object ["message" .= ("Not 5 letters" :: String)])
+        else returnJson $ JsonPattern ["Gray", "Yellow", "Green", "Gray", "Gray"] 
