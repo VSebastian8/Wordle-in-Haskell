@@ -1,4 +1,9 @@
 <div .center>
+    <div #board>
+        $forall word <- displayedWords
+            $forall letter <- word
+                <div .square>#{letter}
+        
     <h1> Keyboard
     <input #word type=input placeholder="Press keys please" disabled>
     <div #keyboard .prevent-select>

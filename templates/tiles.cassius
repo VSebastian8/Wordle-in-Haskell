@@ -1,5 +1,23 @@
 .center
+    display: flex
+    flex-direction: column
+    align-items: center
+#board
+    display: grid
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr
+    width: 250px
+    height: 300px
+    gap: 5px
+    margin-top: 10px
+    margin-bottom: 10px
+.square
+    width: 50px
+    height: 50px
+    border: 2px solid #d3d6da
     text-align: center
+    vertical-align: middle
+    line-height: 50px  
 #keyboard
     display: flex
     flex-direction: column

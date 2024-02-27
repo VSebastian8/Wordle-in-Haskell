@@ -7,7 +7,7 @@
 module Handler.Home where
 
 import Import
-import Yesod.Form.Bootstrap3 (BootstrapFormLayout (..), renderBootstrap3)
+-- import Yesod.Form.Bootstrap3 (BootstrapFormLayout (..), renderBootstrap3)
 -- import Text.Julius (RawJS (..))
 
 -- Define our data that will be used for creating the form.
@@ -28,6 +28,19 @@ allTiles :: [[Text]]
 allTiles = [["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"], 
             ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
             ["ENTER", "Z", "X", "C", "V", "B", "N", "M" ,"BACK"]]
+
+guessedWords :: [[Char]]
+guessedWords = ["FIRST", "SECON"]
+
+currentWord :: [Char]
+currentWord = "TRY"
+
+displayedWords :: [[Char]]
+displayedWords = guessedWords ++ [currentWord ++ (addSpaces $ length currentWord)] ++ (addWords $ length guessedWords)
+    where addSpaces :: Int -> [Char]
+          addSpaces len = map (\_ -> ' ') [1..(5-len)]
+          addWords :: Int -> [[Char]]
+          addWords len = map (\_ -> "     ") [1..(5-len)]
 
 getHomeR :: Handler Html
 getHomeR = do
