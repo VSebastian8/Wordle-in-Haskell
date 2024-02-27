@@ -29,21 +29,25 @@ allTiles = [["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
             ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
             ["ENTER", "Z", "X", "C", "V", "B", "N", "M" ,"BACK"]]
 
-guessedWords :: [[Char]]
-guessedWords = ["FIRST", "SECON"]
 
-currentWord :: [Char]
-currentWord = "TRY"
 
-displayedWords :: [[Char]]
-displayedWords = guessedWords ++ [currentWord ++ (addSpaces $ length currentWord)] ++ (addWords $ length guessedWords)
-    where addSpaces :: Int -> [Char]
-          addSpaces len = map (\_ -> ' ') [1..(5-len)]
-          addWords :: Int -> [[Char]]
-          addWords len = map (\_ -> "     ") [1..(5-len)]
+-- displayedWords :: [[Char]]
+-- displayedWords = guessedWords ++ [currentWord ++ (addSpaces $ length currentWord)] ++ (addWords $ length guessedWords)
+--     where addSpaces :: Int -> [Char]
+--           addSpaces len = map (\_ -> ' ') [1..(5-len)]
+--           addWords :: Int -> [[Char]]
+--           addWords len = map (\_ -> "     ") [1..(5-len)]
+addSpaces :: Int -> [Char]
+addSpaces len = map (\_ -> ' ') [1..(5-len)]
+addWords :: Int -> [[Char]]
+addWords len = map (\_ -> "     ") [1..(5-len)]
 
 getHomeR :: Handler Html
 getHomeR = do
+    let guessedWords = ["FIRST", "SECON"] :: [[Char]]
+    let currentWord = "TRY" :: [Char]
+    let displayedWords = guessedWords ++ [currentWord ++ (addSpaces $ length currentWord)] ++ (addWords $ length guessedWords)
+    current <- lookupSession "current"
     defaultLayout $ do
         aDomId <- newIdent
         setTitle "Wordle"
