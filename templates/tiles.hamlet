@@ -1,8 +1,4 @@
 <div .center>
-    $maybe wd <- current
-        <p>Word #{wd}
-    $nothing
-        <p>I have no words
     <div #board>
         $forall word <- displayedWords
             $forall letter <- word

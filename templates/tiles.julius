@@ -1,39 +1,67 @@
-let tiles = document.getElementsByClassName('tile');
-let textSpace = document.getElementById('word');
-for(let tile of tiles){
-    tile.addEventListener("click", () => {
-        let content = tile.innerHTML;
-        switch(content){
-            case "BACK":
-                if(textSpace.value != "")
-                    textSpace.value = textSpace.value.slice(0, -1);
-                break;
-            case "ENTER":
-                if(textSpace.value != ""){
-                    word = textSpace.value;
-                    textSpace.value = "";
-                    $.ajax({
-                        url: '@{WordR}',
-                        type: 'POST',
-                        contentType: "application/json",
-                        data: JSON.stringify({
-                            guess: word,
-                        }),
-                        success: function (response) {
-                            console.log("Succes ");
-                            console.log(response.pattern);
-                        },
-                        error: function (err) {
-                            console.log("Error ");
-                            console.log(err.responseJSON);
-                            alert(err.responseJSON.message);
-                        },
-                    });
-                }
-                break;
-            default: 
-                if(textSpace.value.length <= 4)
-                    textSpace.value += content;
+window.onload = function(){
+    let tiles = document.getElementsByClassName('tile');
+    let textSpace = document.getElementById('word');
+    let board = document.getElementsByClassName('square');
+
+    function newLetter(letter){
+        for(let square of board){
+            if(square.innerHTML == " "){
+                square.innerHTML = letter;
+                break; 
+            }
         }
-    });
+    }
+    function deleteLetter(){
+        lastLetter = 0
+        for(let i = 0; i < board.length; i++){
+            if(board[i].innerHTML == " "){
+                lastLetter = i - 1;
+                break; 
+            }
+        }
+        if (lastLetter >= 0)
+            board[lastLetter].innerHTML = " ";
+    }
+
+    for(let tile of tiles){
+        tile.addEventListener("click", () => {
+            let content = tile.innerHTML;
+            switch(content){
+                case "BACK":
+                    if(textSpace.value != ""){
+                        textSpace.value = textSpace.value.slice(0, -1);
+                        deleteLetter();
+                    }
+                    break;
+                case "ENTER":
+                    if(textSpace.value != ""){
+                        word = textSpace.value;
+                        $.ajax({
+                            url: '@{WordR}',
+                            type: 'POST',
+                            contentType: "application/json",
+                            data: JSON.stringify({
+                                guess: word,
+                            }),
+                            success: function (response) {
+                                console.log("Succes ");
+                                console.log(response.pattern);
+                                textSpace.value = ""
+                            },
+                            error: function (err) {
+                                console.log("Error ");
+                                console.log(err.responseJSON);
+                                alert(err.responseJSON.message);
+                            },
+                        });
+                    }
+                    break;
+                default: 
+                    if(textSpace.value.length <= 4){
+                        textSpace.value += content;
+                        newLetter(content);
+                    }
+            }
+        });
+    }
 }

@@ -26,7 +26,12 @@ postWordR :: Handler Value
 postWordR = do
     guessRequestBody <- requireCheckJsonBody :: Handler JsonGuess
     let userGuess = guess guessRequestBody
-    setSession "current" userGuess
+    
     if (length userGuess) /= 5
         then sendResponseStatus status400 (object ["message" .= ("Not 5 letters" :: String)])
-        else returnJson $ JsonPattern ["Gray", "Yellow", "Green", "Gray", "Gray"] 
+        else do
+            current <- lookupSession "game"
+            case current of 
+                Just guesses -> setSession "game" (guesses ++ userGuess)
+                Nothing -> setSession "game" userGuess
+            returnJson $ JsonPattern ["Gray", "Yellow", "Green", "Gray", "Gray"] 
