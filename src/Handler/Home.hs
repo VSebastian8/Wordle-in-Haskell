@@ -43,6 +43,5 @@ getHomeR = do
     let displayedWords = guessedWords ++ (addWords $ length guessedWords)
     defaultLayout $ do
         aDomId <- newIdent
-        setTitle "Wordle"
-        $(widgetFile "homepage")
+        setTitle "Wordle Plus"
         $(widgetFile "tiles")
