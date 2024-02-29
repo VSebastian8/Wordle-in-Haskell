@@ -19,3 +19,34 @@ _Many files are the setup for Yesod's scaffolded site so here is a quick guide f
 > Shakespeare template languages - [/templates](https://github.com/VSebastian8/Wordle-in-Haskell/tree/main/templates) (Hamlet, Cassius & Julius for HTML, CSS & JavaScript)
 >
 > Handlers for route requests [/src/Handler](https://github.com/VSebastian8/Wordle-in-Haskell/tree/main/src/Handler) (most project-relevant haskell code lives here)
+
+### Backlog
+
+- [x] text input
+  - type new letter
+  - delete letter
+  - enter word
+- [x] displayed keyboard
+- [ ] user keyboard
+- [x] boxes styling
+- [ ] boxes colors
+- [ ] boxes animation
+- [x] enter word request and response
+- [x] server validation
+- [x] error handling
+- [x] remember current guesses in session
+- [ ] function for guess match against answer
+- [ ] handle game ending
+- [ ] import word list
+- [ ] login
+- [ ] save game in database
+- [ ] infinite mode
+- [ ] statistics
+  - average number of guesses
+  - progress in time
+  - hardest words to guess (for all players)
+- [ ] searchbar for remaining words
+- [ ] send game png to email
+- [ ] custom word list
+- [ ] wikipedia web scraping for 5 letter word list
+- [ ] wordle bot using entropy
