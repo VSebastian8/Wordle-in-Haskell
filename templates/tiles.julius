@@ -72,4 +72,23 @@ window.onload = function(){
             }
         });
     }
+
+    document.addEventListener("keyup", handleKey);
+
+    function handleKey(e) {
+        if(e.key === "Backspace")
+            if(textSpace.value != ""){
+                textSpace.value = textSpace.value.slice(0, -1);
+                deleteLetter();
+            }
+        if(e.key === "Enter")
+            if(textSpace.value != ""){
+                enterWord(word = textSpace.value);
+            }
+        if(e.key.length === 1 && e.key.match(/[a-z]/i))
+            if(textSpace.value.length <= 4){
+                textSpace.value += e.key.toUpperCase();
+                newLetter(e.key.toUpperCase());
+            }
+    }
 }

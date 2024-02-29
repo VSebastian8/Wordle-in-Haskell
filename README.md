@@ -27,7 +27,7 @@ _Many files are the setup for Yesod's scaffolded site so here is a quick guide f
   - delete letter
   - enter word
 - [x] displayed keyboard
-- [ ] user keyboard
+- [x] user keyboard
 - [x] boxes styling
 - [ ] boxes colors
 - [ ] boxes animation
