@@ -7,15 +7,8 @@
 module Handler.Home where
 
 import Import
--- import Yesod.Form.Bootstrap3 (BootstrapFormLayout (..), renderBootstrap3)
--- import Text.Julius (RawJS (..))
 
--- Define our data that will be used for creating the form.
-data FileForm = FileForm
-    { fileInfo :: FileInfo
-    , fileDescription :: Text
-    }
-
+-- Displayed Keyboard
 allTiles :: [[Text]]
 allTiles = [["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"], 
             ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
@@ -26,6 +19,7 @@ addSpaces len = map (\_ -> ' ') [1..(5-len)]
 addWords :: Int -> [String]
 addWords len = map (\_ -> "     ") [1..(6-len)]
 
+-- Session data gets saved as a text, we must convert it into the type we want
 guessList :: Text -> [String]
 guessList "" = []
 guessList txt = splitString $ unpack txt
@@ -37,11 +31,11 @@ splitString _ = []
 getHomeR :: Handler Html
 getHomeR = do
     current <- lookupSession "game"
+    -- Hamlet file displays this list on page load
     let guessedWords = case current of
             Just guesses -> guessList $ guesses
             Nothing -> [] :: [String]
     let displayedWords = guessedWords ++ (addWords $ length guessedWords)
     defaultLayout $ do
-        aDomId <- newIdent
         setTitle "Wordle Plus"
         $(widgetFile "tiles")

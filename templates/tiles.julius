@@ -4,6 +4,7 @@ window.onload = function(){
     let board = document.getElementsByClassName('square');
 
     function newLetter(letter){
+        // Find first empty box and fill it with the letter
         for(let square of board){
             if(square.innerHTML == " "){
                 square.innerHTML = letter;
@@ -12,6 +13,7 @@ window.onload = function(){
         }
     }
     function deleteLetter(){
+        // Find last not empty box and make it empty
         lastLetter = 0
         for(let i = 0; i < board.length; i++){
             if(board[i].innerHTML == " "){
@@ -23,8 +25,32 @@ window.onload = function(){
             board[lastLetter].innerHTML = " ";
     }
 
+    function enterWord(word){
+        // HTTP Request that sends the current guess to the file Word.hs for validation 
+        $.ajax({
+            url: '@{WordR}',
+            type: 'POST',
+            contentType: "application/json",
+            data: JSON.stringify({
+                guess: word,
+            }),
+            success: function (response) {
+                console.log("Succes ");
+                console.log(response.pattern);
+                textSpace.value = "";              
+            },
+            error: function (err) {
+                console.log("Error ");
+                console.log(err.responseJSON);
+                alert(err.responseJSON.message);
+            },
+        });
+    }
+
     for(let tile of tiles){
         tile.addEventListener("click", () => {
+            // Checking which key the user pressed on the displayed keyboard
+            // and process the current word (textSpace.value) accordingly
             let content = tile.innerHTML;
             switch(content){
                 case "BACK":
@@ -35,25 +61,7 @@ window.onload = function(){
                     break;
                 case "ENTER":
                     if(textSpace.value != ""){
-                        word = textSpace.value;
-                        $.ajax({
-                            url: '@{WordR}',
-                            type: 'POST',
-                            contentType: "application/json",
-                            data: JSON.stringify({
-                                guess: word,
-                            }),
-                            success: function (response) {
-                                console.log("Succes ");
-                                console.log(response.pattern);
-                                textSpace.value = ""
-                            },
-                            error: function (err) {
-                                console.log("Error ");
-                                console.log(err.responseJSON);
-                                alert(err.responseJSON.message);
-                            },
-                        });
+                        enterWord(word = textSpace.value);
                     }
                     break;
                 default: 
