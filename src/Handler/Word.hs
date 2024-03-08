@@ -18,7 +18,7 @@ data Pattern = Pattern [Color]
 
 -- Request data
 data JsonGuess = JsonGuess 
-    { guess :: Text }
+    { word :: Text }
 -- Response data
 
 stringifyPattern :: Pattern -> Text
@@ -34,15 +34,18 @@ stringifyColors (color:rest) = case color of
 -- We need the classes for converting between JSON and our Haskell types (Text and [Text])
 instance FromJSON JsonGuess where
     parseJSON =  withObject "JsonGuess" $ \v -> 
-        JsonGuess <$> v .: "guess"
+        JsonGuess <$> v .: "word"
 instance ToJSON Pattern where 
     toJSON (Pattern colors) = object ["pattern" .= map show colors]
 
+matchPattern :: String -> String -> Pattern
+matchPattern answer guess = Pattern $ 
+    foldr(\(a, b) list -> if a == b then Green:list else Gray:list) [] (zip answer guess)
 
 postWordR :: Handler Value
 postWordR = do
     guessRequestBody <- requireCheckJsonBody :: Handler JsonGuess
-    let userGuess = guess guessRequestBody
+    let userGuess = word guessRequestBody
     
     -- Perform server side validations
     if (length userGuess) /= 5
@@ -55,8 +58,8 @@ postWordR = do
                 Nothing -> setSession "gameGuesses" userGuess
 
             --Calculate pattern
-            let guessPattern = Pattern [Gray, Yellow, Green, Gray, Gray]
-            
+            let guessPattern = matchPattern ("ALOHA"::String) (unpack userGuess)
+
             -- Save pattern in the current game pattern from session
             currentPattern <- lookupSession "gamePattern"
             case currentPattern of
