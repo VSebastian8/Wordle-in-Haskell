@@ -54,6 +54,7 @@ window.onload = function(){
                 console.log(response.pattern);
                 let wordLetters = findWord();
                 let wordColors = response.pattern;
+                // Coloring boxes according to the pattern
                 if(wordLetters.length == 5){
                     for(let i = 0; i < 5; i++){
                         board[wordLetters[i]].classList.add(wordColors[i].toLowerCase());
@@ -108,7 +109,7 @@ window.onload = function(){
                 enterWord(word = textSpace.value);
             }
         if(e.key.length === 1 && e.key.match(/[a-z]/i))
-            if(textSpace.value.length <= 4){
+            if(textSpace.value.length <= 4 && board[board.length - 1].innerHTML == " "){
                 textSpace.value += e.key.toUpperCase();
                 newLetter(e.key.toUpperCase());
             }

@@ -14,19 +14,15 @@ allTiles = [["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
             ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
             ["ENTER", "Z", "X", "C", "V", "B", "N", "M" ,"BACK"]]
 
-addSpaces :: Int -> [Char]
-addSpaces len = map (\_ -> ' ') [1..(5-len)]
-addWords :: Int -> [String]
-addWords len = map (\_ -> "     ") [1..(6-len)]
+fillerSpaces :: Int -> [Char]
+fillerSpaces len = map (\_ -> ' ') [1..(5-len)]
+fillerWords :: Int -> [String]
+fillerWords len = map (\_ -> "     ") [1..(6-len)]
 
--- Session data gets saved as a text, we must convert it into the type we want
-guessList :: Text -> [String]
-guessList "" = []
-guessList txt = splitString $ unpack txt
-
-patternList :: String -> [String]
-patternList "" = []
-patternList str = splitString str
+-- Session data gets saved as a text so we must convert it into the type we want
+formatList :: Text -> [String]
+formatList "" = []
+formatList txt = splitString $ unpack txt
 
 splitString :: String -> [String]
 splitString (x1:x2:x3:x4:x5:x6) = [x1, x2, x3, x4, x5]:(splitString x6)
@@ -34,17 +30,21 @@ splitString _ = []
 
 getHomeR :: Handler Html
 getHomeR = do
-    current <- lookupSession "game"
-    -- Hamlet file displays this list on page load
-    let guessedWords = case current of
-            Just guesses -> guessList $ guesses
+    -- Getting current game from session
+    currentGuesses <- lookupSession "gameGuesses"
+    let guessedWords = case currentGuesses of
+            Just guesses -> formatList $ guesses
             Nothing -> [] :: [String]
-    pat <- lookupSession "gamePattern"
-    let colors = case pat of
-            Just col -> guessList $ col 
+   
+    currentPattern <- lookupSession "gamePattern"
+    let guessedColors = case currentPattern of
+            Just colors -> formatList $ colors
             Nothing -> [] :: [String]
-    let displayedWords = guessedWords ++ (addWords $ length guessedWords)
-    let displayedColors = colors ++ (addWords $ length colors)
+
+    -- Hamlet file displays thess lists on page load
+    let displayedWords = take 6 (guessedWords ++ (fillerWords $ length guessedWords))
+    let displayedColors = take 6 (guessedColors ++ (fillerWords $ length guessedColors))
+
     defaultLayout $ do
         setTitle "Wordle Plus"
         $(widgetFile "tiles")
