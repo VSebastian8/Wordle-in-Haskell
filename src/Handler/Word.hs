@@ -38,9 +38,41 @@ instance FromJSON JsonGuess where
 instance ToJSON Pattern where 
     toJSON (Pattern colors) = object ["pattern" .= map show colors]
 
+-- Logic for game pattern matching
+
+-- When calculating the green letters, we also replace them in the guess/answer 
+-- so that we don't consider them when calculating the yellow letters
 matchPattern :: String -> String -> Pattern
-matchPattern answer guess = Pattern $ 
-    foldr(\(a, b) list -> if a == b then Green:list else Gray:list) [] (zip answer guess)
+matchPattern answer guess =
+    let (greenList, (restAnswer, restGuess)) = foldr(\(a, b) (list, (ans, gus)) ->
+            if a == b 
+                then (Green:list, ('*':ans, '-':gus)) 
+                else (Gray:list, (a:ans, b:gus))) ([], ([], [])) (zip answer guess)
+        (yellowList, _) = foldr(\letter (list, ans) -> 
+            if elem letter ans 
+                then (Yellow:list, consume ans letter) 
+                else (Gray:list, ans)) ([], restAnswer) restGuess
+    in Pattern $ combine greenList yellowList
+
+-- Replaces the yellow letter in the answer 
+-- so that two letters in the userGuess won't match with the same letter
+consume :: String -> Char -> String
+consume "" _ = ""
+consume (s:rest) letter 
+    |s == letter = '*':rest
+    |otherwise = s:(consume rest letter) 
+
+-- Used for combining the greenLetters and yellowLetters calculated above
+combine :: [Color] -> [Color] -> [Color]
+combine (c1:rest1) (c2:rest2) = (resolve c1 c2):(combine rest1 rest2)
+    where resolve :: Color -> Color -> Color
+          resolve Green _ = Green
+          resolve _ Green = Green
+          resolve Yellow Yellow = Yellow
+          resolve Yellow Gray = Yellow
+          resolve Gray Yellow = Yellow
+          resolve Gray Gray = Gray
+combine _ _ = []
 
 postWordR :: Handler Value
 postWordR = do
