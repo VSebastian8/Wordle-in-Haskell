@@ -24,6 +24,10 @@ guessList :: Text -> [String]
 guessList "" = []
 guessList txt = splitString $ unpack txt
 
+patternList :: String -> [String]
+patternList "" = []
+patternList str = splitString str
+
 splitString :: String -> [String]
 splitString (x1:x2:x3:x4:x5:x6) = [x1, x2, x3, x4, x5]:(splitString x6)
 splitString _ = []
@@ -35,7 +39,12 @@ getHomeR = do
     let guessedWords = case current of
             Just guesses -> guessList $ guesses
             Nothing -> [] :: [String]
+    pat <- lookupSession "gamePattern"
+    let colors = case pat of
+            Just col -> guessList $ col 
+            Nothing -> [] :: [String]
     let displayedWords = guessedWords ++ (addWords $ length guessedWords)
+    let displayedColors = colors ++ (addWords $ length colors)
     defaultLayout $ do
         setTitle "Wordle Plus"
         $(widgetFile "tiles")

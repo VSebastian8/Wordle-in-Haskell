@@ -2,9 +2,9 @@
 <div .center>
     <div #board>
         <!-- Display guesses saved in session -->
-        $forall word <- displayedWords
-            $forall letter <- word
-                <div .square>#{letter}
+        $forall (word, pattern) <- zip displayedWords displayedColors
+            $forall (letter, color) <- zip word pattern
+                <div .square .#{color}>#{letter}
         
     <h1> Keyboard
     <input #word type=input placeholder="Press keys please" disabled>

@@ -39,4 +39,9 @@ postWordR = do
             case current of 
                 Just guesses -> setSession "game" (guesses ++ userGuess)
                 Nothing -> setSession "game" userGuess
-            returnJson $ JsonPattern ["Gray", "Yellow", "Green", "Gray", "Gray"] 
+            pat <- lookupSession "gamePattern"
+            case pat of
+                Just colors -> setSession "gamePattern" (colors ++ "gyvgg")
+                Nothing -> setSession "gamePattern" ("gyvgg"::Text)
+
+            returnJson $ JsonPattern ["g", "y", "v", "g", "g"] 

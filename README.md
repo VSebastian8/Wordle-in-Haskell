@@ -29,7 +29,7 @@ _Many files are the setup for Yesod's scaffolded site so here is a quick guide f
 - [x] displayed keyboard
 - [x] user keyboard
 - [x] boxes styling
-- [ ] boxes colors
+- [x] boxes colors
 - [ ] boxes animation
 - [x] enter word request and response
 - [x] server validation
