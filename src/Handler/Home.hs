@@ -40,6 +40,11 @@ getHomeR = do
     let guessedColors = case currentPattern of
             Just colors -> formatList $ colors
             Nothing -> [] :: [String]
+ 
+    currentAnswer <- lookupSession "gameAnswer"
+    case currentAnswer of
+        Just _ -> return()
+        Nothing -> setSession "gameAnswer" "ALOHA"
 
     -- Hamlet file displays thess lists on page load
     let displayedWords = take 6 (guessedWords ++ (fillerWords $ length guessedWords))

@@ -82,20 +82,25 @@ postWordR = do
     -- Perform server side validations
     if (length userGuess) /= 5
         then sendResponseStatus status400 (object ["message" .= ("Not 5 letters" :: String)])
-        else do
-            -- Save guess in the current game guesses from session
-            currentGuesses <- lookupSession "gameGuesses"
-            case currentGuesses of 
-                Just guesses -> setSession "gameGuesses" (guesses ++ userGuess)
-                Nothing -> setSession "gameGuesses" userGuess
+        else do 
+            currentAnswer <- lookupSession "gameAnswer"
+            case currentAnswer of
+                Nothing -> sendResponseStatus status400 (object ["message" .= ("No answer selected" :: String)])
+                Just gameAnswer -> do
 
-            --Calculate pattern
-            let guessPattern = matchPattern ("ALOHA"::String) (unpack userGuess)
+                    -- Save guess in the current game guesses from session
+                    currentGuesses <- lookupSession "gameGuesses"
+                    case currentGuesses of 
+                        Just guesses -> setSession "gameGuesses" (guesses ++ userGuess)
+                        Nothing -> setSession "gameGuesses" userGuess        
 
-            -- Save pattern in the current game pattern from session
-            currentPattern <- lookupSession "gamePattern"
-            case currentPattern of
-                Just colors -> setSession "gamePattern" (colors ++ (stringifyPattern guessPattern))
-                Nothing -> setSession "gamePattern" (stringifyPattern guessPattern)
+                    --Calculate pattern
+                    let guessPattern = matchPattern (unpack gameAnswer) (unpack userGuess)
 
-            returnJson $ guessPattern
+                    -- Save pattern in the current game pattern from session
+                    currentPattern <- lookupSession "gamePattern"
+                    case currentPattern of
+                        Just colors -> setSession "gamePattern" (colors ++ (stringifyPattern guessPattern))
+                        Nothing -> setSession "gamePattern" (stringifyPattern guessPattern)
+
+                    returnJson $ guessPattern
