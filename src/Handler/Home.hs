@@ -7,6 +7,7 @@
 module Handler.Home where
 
 import Import
+import System.Random
 
 -- Displayed Keyboard
 allTiles :: [[Text]]
@@ -28,6 +29,11 @@ splitString :: String -> [String]
 splitString (x1:x2:x3:x4:x5:x6) = [x1, x2, x3, x4, x5]:(splitString x6)
 splitString _ = []
 
+getElement :: [Text] -> Int -> Text
+getElement [] _ = ""
+getElement (t:_) 0 = t
+getElement (_:ts) n = getElement ts (n - 1)
+
 getHomeR :: Handler Html
 getHomeR = do
     -- Getting current game from session
@@ -44,7 +50,9 @@ getHomeR = do
     currentAnswer <- lookupSession "gameAnswer"
     case currentAnswer of
         Just _ -> return()
-        Nothing -> setSession "gameAnswer" "ALOHA"
+        Nothing -> do
+           i <- randomRIO (0 :: Int, 3 :: Int)
+           setSession "gameAnswer" $ getElement ["ALOHA", "REACT", "ROMAN", "DREAM"] i
 
     -- Hamlet file displays thess lists on page load
     let displayedWords = take 6 (guessedWords ++ (fillerWords $ length guessedWords))
