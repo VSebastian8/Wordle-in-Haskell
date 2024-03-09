@@ -2,6 +2,7 @@ window.onload = function(){
     let tiles = document.getElementsByClassName('tile');
     let textSpace = document.getElementById('word');
     let board = document.getElementsByClassName('square');
+    let won = false;
 
     function newLetter(letter){
         // Find first empty box and fill it with the letter
@@ -56,8 +57,11 @@ window.onload = function(){
                 let wordColors = response.pattern;
                 // Coloring boxes according to the pattern
                 if(wordLetters.length == 5){
+                    won = true;
                     for(let i = 0; i < 5; i++){
                         board[wordLetters[i]].classList.add(wordColors[i].toLowerCase());
+                        if(wordColors[i] != "Green")
+                            won = false;
                     }
                 }
                 textSpace.value = "";              
@@ -88,7 +92,7 @@ window.onload = function(){
                     }
                     break;
                 default: 
-                    if(textSpace.value.length <= 4){
+                    if(textSpace.value.length <= 4 && !won){
                         textSpace.value += content;
                         newLetter(content);
                     }
@@ -109,7 +113,7 @@ window.onload = function(){
                 enterWord(word = textSpace.value);
             }
         if(e.key.length === 1 && e.key.match(/[a-z]/i))
-            if(textSpace.value.length <= 4 && board[board.length - 1].innerHTML == " "){
+            if(textSpace.value.length <= 4 && board[board.length - 1].innerHTML == " " && !won){
                 textSpace.value += e.key.toUpperCase();
                 newLetter(e.key.toUpperCase());
             }
