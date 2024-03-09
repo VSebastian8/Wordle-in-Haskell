@@ -35,12 +35,12 @@ _Many files are the setup for Yesod's scaffolded site so here is a quick guide f
 - [x] server validation
 - [x] error handling
 - [x] remember current guesses in session
-- [ ] function for guess match against answer
-- [ ] handle game ending
+- [x] function for guess match against answer
+- [x] handle game ending
 - [ ] import word list
 - [ ] login
 - [ ] save game in database
-- [ ] infinite mode
+- [x] infinite mode
 - [ ] statistics
   - average number of guesses
   - progress in time

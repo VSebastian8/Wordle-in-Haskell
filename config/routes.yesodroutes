@@ -10,6 +10,7 @@
 / HomeR GET 
 /description DescriptionR GET
 /word WordR POST
+/restart RestartR GET
 
 /comments CommentR POST
 

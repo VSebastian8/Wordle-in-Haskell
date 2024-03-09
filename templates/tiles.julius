@@ -2,7 +2,21 @@ window.onload = function(){
     let tiles = document.getElementsByClassName('tile');
     let textSpace = document.getElementById('word');
     let board = document.getElementsByClassName('square');
-    let won = false;
+    
+    function checkEnd(){
+        for(let i = 0; i < 6; i++){
+            let count = 0;
+            for(let j = 0; j < 5; j++){
+                if(board[i * 5 + j].classList.contains('v'))
+                    count++;
+            }
+            if(count == 5)
+                return true;
+        }
+        return false;
+    }
+
+    let won = checkEnd();
 
     function newLetter(letter){
         // Find first empty box and fill it with the letter

@@ -1,5 +1,6 @@
 <!-- Wordle Game -->
 <div .center>
+    <a href=@{RestartR}> Restart Game
     <div #board>
         <!-- Display guesses saved in session -->
         $forall (word, pattern) <- zip displayedWords displayedColors
